@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>끝말잇기</title>
+  <style>
+      #number{
+          color: red;
+      }
+  </style>
+</head>
+
+<body>
+  <div>참가자: <span id="number"></span>명</div>
+  <div>현재 제시어: <span id="word"></span></div>
+  <div><span id="order"></span>번째 참가자님 입력하세요↓</div>
+  <input type="text">
+  <button>입력</button>
+  <script>
+    const number = parseInt(prompt('몇 명이 참가하나요?'));
+    const $number = document.querySelector('#number');
+    const $button = document.querySelector('button');
+    const $input = document.querySelector('input');
+    const $word = document.querySelector('#word');
+    const $order = document.querySelector('#order');
+    let word;//제시어를 담을 변수
+    let newWord;//새로 입력된 n번째 제시어
+
+    if(number < 1){
+        alert('1이상의 인원을 입력해주세요😩');
+        $number.textContent = number;
+    } 
+
+    $number.textContent = number;
+    $order.textContent = 1;
+
+    const onClickButton = () => {
+        if(!word){//제시어가 비어 있다
+            word = newWord;//입력한 제시어(newWord)를 제시어(word)에 등록
+            $word.textContent = word;//↑위 내용을 화면에도 추가해서 보여주기
+            $input.value = "";//입력하고 나면 제시어 지워주기 => 다음 제시어를 받기 편하게
+            const currentOrder = parseInt($order.textContent);
+            if(currentOrder+1 > number){//현재 순서 +1이 number값(총인원)보다 큰가? or 현재 순서 == 총 인원수?
+                //1번 차례로 돌아감
+                $order.textContent = 1;
+            } else{
+                //다음 차례로, (n+1)
+                $order.textContent = currentOrder+1;
+
+            }
+        } else {//제시어가 안 비어 있다
+            if(word[word.length -1] === newWord[0]){//올바른가(word 문자열 마지막 단어 == newWord 문자열 첫 단어 )
+                word = newWord;
+                $word.textContent = word;
+                $input.value = "";
+                const currentOrder = parseInt($order.textContent);
+                if(currentOrder+1 > number){//현재 순서 +1이 number값(총인원)보다 큰가? or 현재 순서 == 총 인원수?
+                    //1번 차례로 돌아감
+                    $order.textContent = 1;
+                } else{
+                    //다음 차례로, (n+1)
+                    $order.textContent = currentOrder+1;
+            }
+            } else{//올바르지 않은가
+                alert('올바르지 않은 단어입니다. 다시 입력해 주세요!');
+                $input.value = "";
+            }
+        }
+    };
+    const onInput = (event) => {
+        newWord = event.target.value;
+    };
+
+    $button.addEventListener('click', onClickButton);
+    $input.addEventListener('input', onInput);
+  </script>
+</body>
+</html>
